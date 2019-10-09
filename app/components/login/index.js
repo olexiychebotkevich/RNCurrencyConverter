@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native'
 
-export default class SignIn extends Component {
+export default class LoginScreen extends Component {
   state = {
    password: '', email: ''
   }
@@ -24,6 +24,7 @@ export default class SignIn extends Component {
   }
  
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <TextInput
@@ -45,6 +46,10 @@ export default class SignIn extends Component {
           title='Sign In'
           onPress={this.signIn}
         />
+        <Button
+                    title="Go to register"
+                    onPress={() => navigate('Register')}
+                />
       </View>
     )
   }

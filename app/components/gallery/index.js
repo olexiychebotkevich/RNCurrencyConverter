@@ -4,6 +4,8 @@ import {
     Image, TouchableOpacity, NativeModules,
     Dimensions, TextInput, TouchableHighlight
 } from 'react-native'
+import { Button } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios'
 import ImagePicker from 'react-native-image-crop-picker';
 
@@ -19,21 +21,25 @@ class Gallery extends Component {
             UserCompany: '',
             UserOffice: '',
             UserPhoneNumber: '',
-            UserEmail: '' 
+            UserEmail: ''
 
         };
     }
 
 
-    AddContact(){
-        const {UserName,UserCompany,UserOffice,UserPhoneNumber,UserEmail,image}=this.state;
-        
+    AddContact = () => {
+        // this.props.navigation.push('Details')
+        const { navigation } = this.props;
+        const { UserName, UserCompany, UserOffice, UserPhoneNumber, UserEmail, image } = this.state;
+
         if (UserName !== '' && UserPhoneNumber !== '') {
-            const model={Name:UserName,Company:UserCompany,Office:UserOffice,PhoneNumber:UserPhoneNumber,Email:UserEmail,Image:image.uri}
-            console.log('model: ',model);
-            axios.post(`http://10.0.2.2:5000/api/Contact/addcontact`,  model )
+            const model = { Name: UserName, Company: UserCompany, Office: UserOffice, PhoneNumber: UserPhoneNumber, Email: UserEmail, Image: image.uri }
+            console.log('model: ', model);
+            axios.post(`http://10.0.2.2:5000/api/Contact/addcontact`, model)
                 .then(res => {
                     console.log(res);
+
+                    navigation.push('Contact');
                 })
         }
     }
@@ -69,9 +75,9 @@ class Gallery extends Component {
         }).then(image => {
             console.log('received image', image);
             this.setState({
-                image: {uri: `data:${image.mime};base64,`+ image.data, width: image.width, height: image.height},
+                image: { uri: `data:${image.mime};base64,` + image.data, width: image.width, height: image.height },
                 images: null
-               
+
             });
         }).catch(e => {
             console.log(e);
@@ -88,9 +94,9 @@ class Gallery extends Component {
 
     renderImage(image) {
         return (
-        <TouchableOpacity onPress={() => this.pickSingle(true, true)} >
-        <Image style={styles.ContactImage} source={image} />
-        </TouchableOpacity>
+            <TouchableOpacity onPress={() => this.pickSingle(true, true)} >
+                <Image style={styles.ContactImage} source={image} />
+            </TouchableOpacity>
         );
     }
 
@@ -110,70 +116,64 @@ class Gallery extends Component {
 
         return this.renderImage(image);
     }
-
-
-
-
-
     render() {
-
-
-
         return (
-            <View style={styles.container}>
+            <ScrollView>
+                <View style={styles.container}>
 
-                <Text style={styles.titleText}>New Contact</Text>
+                    <Text style={styles.titleText}>New Contact</Text>
 
-                {this.state.image ? this.renderAsset(this.state.image) : this.renderUploadImage(this.state.uploadimageurl)}
+                    {this.state.image ? this.renderAsset(this.state.image) : this.renderUploadImage(this.state.uploadimageurl)}
 
-                <TextInput
-                    style={styles.input}
-                    placeholder='Name'
-                    onChangeText={(username) => { if (/^[a-zA-Zа-яА-Я]+$/ui.test(username) || username === '') { this.onChangeText('UserName', username) } }}
-                    value={this.state.UserName}
-                    maxLength={15}
-                />
-
-
-                <TextInput
-                    style={styles.input}
-                    placeholder='Company'
-                    onChangeText={val => this.onChangeText('UserCompany', val)}
-                    maxLength={30}>
-
-                </TextInput>
-
-                <TextInput
-                    style={styles.input}
-                    placeholder='Office'
-                    onChangeText={(useroffice) => { if (/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u.test(useroffice) || useroffice === '') { this.onChangeText('UserOffice', useroffice) } }}
-                    maxLength={30}>
-                </TextInput>
-
-                <TextInput
-
-                    style={styles.input}
-                    keyboardType='number-pad'
-                    placeholder="Phone number"
-                    onChangeText={(phonenumber) => { if (/^\d+$/.test(phonenumber) || phonenumber === '') { this.onChangeText('UserPhoneNumber', phonenumber) } }}
-                    value={this.state.UserPhoneNumber}
-                    maxLength={10}
-                />
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Name'
+                        onChangeText={(username) => { if (/^[a-zA-Zа-яА-Я]+$/ui.test(username) || username === '') { this.onChangeText('UserName', username) } }}
+                        value={this.state.UserName}
+                        maxLength={15}
+                    />
 
 
-                <TextInput
-                    style={styles.input}
-                    placeholder='Email'
-                    onChangeText={val => this.onChangeText('UserEmail', val)}>
-                </TextInput>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Company'
+                        onChangeText={val => this.onChangeText('UserCompany', val)}
+                        maxLength={30}>
 
-                <TouchableHighlight style={[styles.buttonContainer, styles.addButton]} onPress={() => this.AddContact()}>
-                    <Text style={styles.btnaddText}>Add</Text>
-                </TouchableHighlight>
+                    </TextInput>
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Office'
+                        onChangeText={(useroffice) => { if (/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u.test(useroffice) || useroffice === '') { this.onChangeText('UserOffice', useroffice) } }}
+                        maxLength={30}>
+                    </TextInput>
+
+                    <TextInput
+
+                        style={styles.input}
+                        keyboardType='number-pad'
+                        placeholder="Phone number"
+                        onChangeText={(phonenumber) => { if (/^\d+$/.test(phonenumber) || phonenumber === '') { this.onChangeText('UserPhoneNumber', phonenumber) } }}
+                        value={this.state.UserPhoneNumber}
+                        maxLength={10}
+                    />
+
+
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Email'
+                        onChangeText={val => this.onChangeText('UserEmail', val)}>
+                    </TextInput>
+
+                    <TouchableHighlight style={[styles.buttonContainer, styles.addButton]} onPress={() => this.AddContact()}>
+                        <Text style={styles.btnaddText}>Add</Text>
+                    </TouchableHighlight>
 
 
 
-            </View>
+                </View>
+            </ScrollView>
         );
     }
 }

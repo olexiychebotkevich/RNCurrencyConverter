@@ -6,7 +6,7 @@ import {
   StyleSheet,
 } from 'react-native'
 
-export default class SignUp extends Component {
+export default class RegisterScreen extends Component {
   state = {
     username: '', password: '', email: '', phone_number: ''
   }
