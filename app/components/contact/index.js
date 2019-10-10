@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { View, Text, Image,StyleSheet ,ScrollView} from 'react-native'
 import { Card, ListItem, Button, Icon } from 'react-native-elements'
 import axios from 'axios'
@@ -26,7 +26,13 @@ class ContactScreen extends Component {
     render() {
         const { navigate } = this.props.navigation;
         return (
+            <Fragment>
+                   <Button
+                    title="ADD CONTACT"
+                    onPress={() => navigate('Gallery')}
+                    />
             <ScrollView>
+             
             <View style={{
                 flex: 1,
                 flexDirection: 'column',
@@ -34,7 +40,7 @@ class ContactScreen extends Component {
                 {
                     this.state.contacts.map((u, i) => {
                         return (
-                            <View style={{ height: 100}} >
+                            <View style={{ height: 100}} key={u.email} >
 
                                 <View key={i} style={{ flex: 1, height: 50, margin: 10, flexDirection: 'row' , backgroundColor: 'skyblue' }}>
                                     <View style={{ width: 150, height: 100 ,marginLeft:10}}>
@@ -51,17 +57,15 @@ class ContactScreen extends Component {
 
                                 </View>
                             </View>
+                           
                         );
                     })
                 }
-                <Button
-                    title="ADD CONTACT"
-                    onPress={() => navigate('Gallery')}
-                />
+        
 
             </View>
 </ScrollView>
-
+</Fragment>
 
 
         );
